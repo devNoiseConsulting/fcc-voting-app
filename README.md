@@ -2,7 +2,7 @@
 
 An implamentation of freeCodeCamp's Build a Voting App.
 
-User Stories:
+## User Stories:
 
 -   As an authenticated user, I can keep my polls and come back later to access them.
 -   As an authenticated user, I can share my polls with my friends.
@@ -14,7 +14,7 @@ User Stories:
 -   As an authenticated user, if I don't like the options on a poll, I can create a new option.
 
 
-React App Routes:
+## React App Routes:
 
 -   /login
     -   Need to figure out authentication. [Passport?](http://passportjs.org/)
@@ -29,3 +29,21 @@ React App Routes:
     -   Let users vote.
     -   Authenticated user can create new option.
     -   Owner can delete this poll.
+
+## Express.JS API Routes:
+
+-   /api/newpoll
+    -   POST request
+    -   add new poll to "database".
+    -   **Requirement:** user has to be authenticated.
+-   /api/poll/:id
+    -   GET request
+        -   return the information for the poll with id.
+    -   POST request
+        -   record vote for poll
+    -   PUT request
+        -   add new option to poll
+        -   **Requirement:** user has to be authenticated.
+    -   DELETE request
+        -   remove poll
+        -   **Requirement:** user had to be authenticated and owner.
