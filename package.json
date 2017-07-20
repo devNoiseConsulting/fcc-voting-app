@@ -23,7 +23,8 @@
   },
   "homepage": "https://github.com/devNoiseConsulting/fcc-voting-app#readme",
   "dependencies": {
-    "express": "^4.15.3"
+    "express": "^4.15.3",
+    "mongodb": "^2.2.30"
   },
   "devDependencies": {
     "concurrently": "^3.5.0"

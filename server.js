@@ -1,9 +1,13 @@
+const mongo = require('mongodb').MongoClient;
+const db = require('./db');
+const dbUrl = "mongodb://" + process.env.DBUSER + ":" + process.env.DBPASSWORD + "@" + process.env.DBURL;
+
 const express = require("express");
 const fs = require("fs");
 const util = require('util');
 
 const app = express();
-const router = app.Router();
+const router = app.Router;
 
 app.set("port", process.env.PORT || 3001);
 
@@ -39,6 +43,15 @@ app.get('/api', function(req, res) {
   res.end(util.inspect(reqInfo));
 });
 
-app.listen(app.get("port"), () => {
-  console.log(`Find the server at: http://localhost:${app.get("port")}/`); // eslint-disable-line no-console
+
+db.connect(dbUrl, function(err) {
+    if (err) {
+        console.log('Unable to connect to Mongo.');
+        process.exit(1);
+    } else {
+        app.listen(app.get("port"), () => {
+          console.log(`Find the server at: http://localhost:${app.get("port")}/`); // eslint-disable-line no-console
+          console.log(dbUrl);
+        });
+    }
 });
