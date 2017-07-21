@@ -47,3 +47,12 @@ An implamentation of freeCodeCamp's Build a Voting App.
     -   DELETE request
         -   remove poll
         -   **Requirement:** user had to be authenticated and owner.
+
+## Poll Object
+    {
+      id: number, // base64 encoded UUID?
+      title: string,
+      owner: user Id,
+      choices: {},
+      voters: [] // IP or user Id
+    }
