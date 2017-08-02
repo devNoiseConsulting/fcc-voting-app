@@ -13,7 +13,6 @@ An implamentation of freeCodeCamp's Build a Voting App.
 -   As an unauthenticated or authenticated user, I can see the results of polls in chart form. (This could be implemented using Chart.js or Google Charts.)
 -   As an authenticated user, if I don't like the options on a poll, I can create a new option.
 
-
 ## React App Routes:
 
 -   /login
@@ -32,6 +31,11 @@ An implamentation of freeCodeCamp's Build a Voting App.
 
 ## Express.JS API Routes:
 
+-   /api/login
+    -   POST request
+-   /api/signup
+    -   POST request
+    -   add new user to "database".
 -   /api/newpoll
     -   POST request
     -   add new poll to "database".
@@ -49,6 +53,7 @@ An implamentation of freeCodeCamp's Build a Voting App.
         -   **Requirement:** user had to be authenticated and owner.
 
 ## Poll Object
+
     {
       id: number, // base64 encoded UUID?
       title: string,
@@ -56,3 +61,16 @@ An implamentation of freeCodeCamp's Build a Voting App.
       choices: {},
       voters: [] // IP or user Id
     }
+
+## User Object
+
+    {
+      id: number, // base64 encoded UUID?
+      username: string,
+      password: hashed string
+    }
+
+## Source of Info/help
+
+-   [How to get "create-react-app" to work with your API](https://www.fullstackreact.com/articles/using-create-react-app-with-a-server/)
+-   [Express Router](http://www.syntaxsuccess.com/viewarticle/express-router)
