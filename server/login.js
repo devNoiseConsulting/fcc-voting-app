@@ -1,10 +1,10 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
 const debug = require('./debug');
 
-router.all('/login', debug.reqMirror);
+router.all('/login', debug.debugToken);
 
-router.all('/signup', debug.reqMirror);
+router.all('/signup', debug.debugToken);
 
 module.exports = router;

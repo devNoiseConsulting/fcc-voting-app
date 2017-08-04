@@ -8,3 +8,7 @@ let result = base64js.fromByteArray(arr);
 
 console.log(arr);
 console.log(result);
+
+const hexArr = arr.map(v => ("00" + v.toString(16)).substr(-2)).join('');
+console.log(arr);
+console.log(hexArr);

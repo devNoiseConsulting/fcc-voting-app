@@ -4,6 +4,7 @@ const dbUrl = 'mongodb://' + process.env.DBUSER + ':' + process.env.DBPASSWORD +
 
 const debug = require('./server/debug');
 const loginRouter = require('./server/login');
+const pollRouter = require('./server/poll');
 
 const express = require('express');
 
@@ -18,6 +19,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 app.use('/api', loginRouter);
+app.use('/api', pollRouter);
 app.get('/api', debug.reqMirror);
 
 //app.get('*', debug.reqMirror);
