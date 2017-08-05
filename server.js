@@ -7,9 +7,11 @@ const loginRouter = require('./server/login');
 const pollRouter = require('./server/poll');
 
 const express = require('express');
+const cookieParser = require('cookie-parser')
+
 
 const app = express();
-const router = app.Router;
+app.use(cookieParser());
 
 app.set('port', process.env.PORT || 3001);
 

@@ -55,6 +55,7 @@ module.exports.debugToken = function(req, res) {
   reqKeys.forEach(key => reqInfo[key] = req[key]);
   const payload = util.inspect(reqInfo);
   const token = jwt.encode(payload, jwtSecret);
-
-  res.end(token);
+  res.cookie('auth_token', token);
+  
+  res.end(util.inspect(reqInfo));
 }
