@@ -1,13 +1,51 @@
-var mongoose = require('mongoose');
+// https://www.joshmorony.com/creating-role-based-authentication-with-passport-in-ionic-2-part-1/
+const mongoose = require('mongoose');
+const bcrypt = require('bcrypt-nodejs');
 
-var Schema = mongoose.Schema;
+let UserSchema = new mongoose.Schema({
+  email: {
+    type: String,
+    lowercase: true,
+    unique: true,
+    required: true
+  },
+  password: {
+    type: String,
+    required: true
+  }
+}, {timestamps: true});
 
-var UserSchema = new Schema({
-  id: ObjectId,
-  username: String,
-  password: String
+UserSchema.pre('save', function(next) {
+  let user = this;
+  const SALT_FACTOR = 5;
+
+  if (!user.isModified('password')) {
+    return next();
+  }
+
+  bcrypt.genSalt(SALT_FACTOR, function(err, salt) {
+    if (err) {
+      return next(err);
+    }
+
+    bcrypt.hash(user.password, salt, null, function(err, hash) {
+      if (err) {
+        return next(err);
+      }
+      user.password = hash;
+      next();
+    });
+  });
 });
 
-var User = mongoose.model('User', UserSchema);
+UserSchema.methods.comparePassword = function(passwordAttempt, cb) {
+  bcrypt.compare(passwordAttempt, this.password, function(err, isMatch) {
+    if (err) {
+      return cb(err);
+    } else {
+      cb(null, isMatch);
+    }
+  });
+}
 
-module.exports.User = User;
+module.exports = mongoose.model('User', UserSchema);

@@ -6,9 +6,12 @@ const loginRouter = require('./server/login');
 const pollRouter = require('./server/poll');
 
 const express = require('express');
-const cookieParser = require('cookie-parser')
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 
 const app = express();
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
 
 app.set('port', process.env.PORT || 3001);

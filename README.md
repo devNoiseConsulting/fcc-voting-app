@@ -66,7 +66,7 @@ An implamentation of freeCodeCamp's Build a Voting App.
 
     {
       id: number, // base64 encoded UUID?
-      username: string,
+      email: string,
       password: hashed string
     }
 
@@ -74,3 +74,9 @@ An implamentation of freeCodeCamp's Build a Voting App.
 
 -   [How to get "create-react-app" to work with your API](https://www.fullstackreact.com/articles/using-create-react-app-with-a-server/)
 -   [Express Router](http://www.syntaxsuccess.com/viewarticle/express-router)
+
+-   [Express Tutorial Part 3: Using a Database (with Mongoose)](https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/mongoose)
+-   [Part 2: Introducing Mongoose to Your Node.js and Restify API](https://www.mongodb.com/blog/post/part-2-introducing-mongoose-to-your-nodejs-and-restify-api)
+-   [Easily Develop Node.js and MongoDB Apps with Mongoose ― Scotch](https://scotch.io/tutorials/using-mongoosejs-in-node-js-and-mongodb-applications)
+-   [Cookie Management in Express](https://www.codementor.io/noddy/cookie-management-in-express-js-du107rmna)
+-   [Creating Role Based Authentication with Passport in Ionic 2 – Part 1](https://www.joshmorony.com/creating-role-based-authentication-with-passport-in-ionic-2-part-1/)

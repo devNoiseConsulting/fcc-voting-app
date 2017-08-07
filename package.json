@@ -24,6 +24,8 @@
   "homepage": "https://github.com/devNoiseConsulting/fcc-voting-app#readme",
   "dependencies": {
     "base64-js": "^1.2.1",
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.17.2",
     "cookie-parser": "^1.4.3",
     "express": "^4.15.3",
     "jwt-simple": "^0.5.1",
