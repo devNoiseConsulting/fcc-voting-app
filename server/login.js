@@ -8,33 +8,78 @@ const jwtSecret = Buffer.from(process.env.JWT_SECRET, 'hex');
 
 const debug = require('./debug');
 
-let login = function(req, res, next) {
+let mkToken = function(user) {
+  let payload = {
+    email: user.email
+  };
 
+  return jwt.encode(payload, jwtSecret);
+};
+
+let login = function(req, res, next) {
+  let erroJSON = {
+    status: 403,
+    error: 'Login failed. Please try again.'
+  };
+
+  let hanndlePasswordCheck = function(err, isMatch, user) {
+    if (err) {
+      res.clearCookie('authToken');
+      res.status(403).send(err);
+    } else {
+      if (isMatch) {
+        let token = mkToken(user);
+        res.cookie('authToken', token, {
+          maxAge: 900000,
+          httpOnly: true
+        });
+
+        res.status(200).send(user);
+      } else {
+        res.clearCookie('authToken');
+        res.status(403).send(erroJSON);
+      }
+    }
+  };
+
+  // grab the parameters sent in
+  let email = req.body.email;
+  let password = req.body.password;
+
+  // see if we can find the user in mongo.
+  User.findOne({email: email}).then(user => {
+    if (user) {
+      // test to see if the password matches.
+      user.comparePassword(password, hanndlePasswordCheck);
+    } else {
+      res.clearCookie('authToken');
+      res.status(403).send(erroJSON);
+    }
+  }).catch(err => {
+    res.clearCookie('authToken');
+    res.status(403).send(err);
+  });
 };
 
 let signup = function(req, res, next) {
-  console.log('signup', req.body.email, req.body.password);
-  console.log(req.body);
   data = {
     email: req.body.email,
     password: req.body.password
   }
-  User.create(data)
-    .then(task => {
-      // Do some cookie stuff before we send the response.
-      let payload = {email: task.email };
-      let token = jwt.encode(payload, jwtSecret);
+  User.create(data).then(user => {
+    // Do some cookie stuff before we send the response.
+    let token = mkToken(user);
+    res.cookie('authToken', token, {
+      maxAge: 900000,
+      httpOnly: true
+    });
 
-      console.log('token value', payload);
-      console.log('signup cookie', token);
-      res.cookie('authToken', token, { maxAge: 900000, httpOnly: true })
-
-      res.status(200).send(task)
-      next();
-    })
-    .catch(err => {
-      res.status(500).send(err);
-    })
+    res.status(200).send(user)
+    next();
+  }).catch(err => {
+    res.clearCookie('authToken');
+    res.status(500).send(err);
+  })
 };
 
 let debugCookie = function(req, res, next) {
@@ -46,7 +91,7 @@ let debugCookie = function(req, res, next) {
   res.status(200).send(decoded);
 };
 
-router.post('/login', debug.debugToken);
+router.post('/login', login);
 
 router.post('/signup', signup);
 

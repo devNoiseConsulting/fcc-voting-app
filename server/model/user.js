@@ -39,11 +39,12 @@ UserSchema.pre('save', function(next) {
 });
 
 UserSchema.methods.comparePassword = function(passwordAttempt, cb) {
+  let user = this;
   bcrypt.compare(passwordAttempt, this.password, function(err, isMatch) {
     if (err) {
       return cb(err);
     } else {
-      cb(null, isMatch);
+      cb(null, isMatch, user);
     }
   });
 }
