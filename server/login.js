@@ -17,7 +17,7 @@ let mkToken = function(user) {
 };
 
 let login = function(req, res, next) {
-  let erroJSON = {
+  let errorJSON = {
     status: 403,
     error: 'Login failed. Please try again.'
   };
@@ -37,7 +37,7 @@ let login = function(req, res, next) {
         res.status(200).send(user);
       } else {
         res.clearCookie('authToken');
-        res.status(403).send(erroJSON);
+        res.status(403).send(errorJSON);
       }
     }
   };
@@ -53,7 +53,7 @@ let login = function(req, res, next) {
       user.comparePassword(password, hanndlePasswordCheck);
     } else {
       res.clearCookie('authToken');
-      res.status(403).send(erroJSON);
+      res.status(403).send(errorJSON);
     }
   }).catch(err => {
     res.clearCookie('authToken');
