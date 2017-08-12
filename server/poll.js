@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const Poll = require('./model/poll');
+
 
 const jwt = require('jwt-simple');
 
@@ -25,18 +27,33 @@ let authCheck = function(req, res, next) {
       }
     } catch (e) {
       // It was a bad cookie.
+      res.clearCookie('authToken');
+      res.status(403).send(errorJSON);
     }
-    res.clearCookie('authToken');
-    res.status(403).send(errorJSON);
   } else {
     res.clearCookie('authToken');
     res.status(403).send(errorJSON);
   }
 };
 
+let createPoll = function(req, res, next) {
+  data = {
+    title: req.body.title,
+    owner: req.authEmail,
+    choices: req.body.choices,
+    voters: []
+  };
+
+  Poll.create(data).then(poll => {
+    res.status(200).send(poll);
+  }).catch(err => {
+    res.status(500).send(err);
+  });
+}
+
 router.get('/polls/:offset', debug.reqMirror);
 
-router.post('/newpoll', authCheck, debug.reqMirror);
+router.post('/newpoll', authCheck, createPoll);
 
 router.get('/poll/:id', debug.reqMirror);
 router.post('/poll/:id', debug.reqMirror);

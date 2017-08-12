@@ -3,9 +3,15 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var PollSchema = new Schema({
-  id: ObjectId, // base64 encoded UUID?
-  title: String,
-  owner: ObjectId,
+  id: Schema.Types.ObjectId,
+  title: {
+    type: String,
+    required: true
+  },
+  owner: {
+    type: String,
+    required: true
+  },
   choices: [
     {
       id: Number,
@@ -16,6 +22,4 @@ var PollSchema = new Schema({
   voters: Array
 });
 
-var Poll = mongoose.model('Poll', PollSchema);
-
-module.exports.Poll = Poll;
+module.exports = mongoose.model('Poll', PollSchema);

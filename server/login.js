@@ -65,7 +65,8 @@ let signup = function(req, res, next) {
   data = {
     email: req.body.email,
     password: req.body.password
-  }
+  };
+  
   User.create(data).then(user => {
     // Do some cookie stuff before we send the response.
     let token = mkToken(user);
@@ -79,7 +80,7 @@ let signup = function(req, res, next) {
   }).catch(err => {
     res.clearCookie('authToken');
     res.status(500).send(err);
-  })
+  });
 };
 
 let debugCookie = function(req, res, next) {
