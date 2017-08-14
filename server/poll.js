@@ -71,7 +71,11 @@ let getPoll = function(req, res, next) {
   });
 };
 
-let deletePoll = function(req, res, next) {
+let recordPollVote = function(req, res, next) {
+  let compareChoices = function(a, b) {
+    return a.id - b.id;
+  }
+
   let errorJSON = {
     status: 403,
     error: 'Could not find a poll with that id.'
@@ -79,14 +83,56 @@ let deletePoll = function(req, res, next) {
 
   // grab the parameters sent in
   let id = req.params.id;
+  let choice = req.body.choice;
 
-  Poll.remove({_id: id}).then(poll => {
-    var response = {
-      status: 202,
-      message: "Poll successfully deleted",
-      id: id
-    };
-    res.status(202).send(response);
+  // see if we can find the user in mongo.
+  Poll.findOne({_id: id}).then(poll => {
+    if (poll) {
+      // Need to handle things here.
+      poll.choices = poll.choices.map(c => {
+        if (c.id == choice) {
+          c.count = c.count + 1;
+        }
+        console.log(c);
+        return c;
+      });
+
+      poll.save().then(poll => {
+        res.status(200).send(poll.toClient());
+      }).catch(err => {
+        errorJSON.status = 500;
+        errorJSON.error = 'Could not update poll.';
+        res.status(500).send(errorJSON);
+      });
+    } else {
+      res.status(403).send(errorJSON);
+    }
+  }).catch(err => {
+    res.status(403).send(err);
+  });
+};
+
+let deletePoll = function(req, res, next) {
+  let errorJSON = {
+    status: 403,
+    error: 'Could not find a poll with that id or you are not allowed to remove that poll.'
+  };
+
+  // grab the parameters sent in
+  let id = req.params.id;
+  let email = req.authEmail;
+
+  Poll.remove({_id: id, owner: email}).then(commandResult => {
+    if (commandResult.result.n > 0) {
+      var response = {
+        status: 202,
+        message: "Poll successfully deleted",
+        id: id
+      };
+      res.status(202).send(response);
+    } else {
+      res.status(403).send(errorJSON);
+    }
   }).catch(err => {
     res.status(403).send(err);
   });
@@ -97,7 +143,7 @@ router.get('/polls/:offset', debug.reqMirror);
 router.post('/newpoll', authCheck, createPoll);
 
 router.get('/poll/:id', getPoll);
-router.post('/poll/:id', debug.reqMirror);
+router.post('/poll/:id', recordPollVote);
 router.put('/poll/:id', authCheck, debug.reqMirror);
 router.delete('/poll/:id', authCheck, deletePoll);
 
