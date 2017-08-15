@@ -85,10 +85,8 @@ let recordPollVote = function(req, res, next) {
   let id = req.params.id;
   let choice = req.body.choice;
 
-  // see if we can find the user in mongo.
   Poll.findOne({_id: id}).then(poll => {
     if (poll) {
-      // Need to handle things here.
       poll.choices = poll.choices.map(c => {
         if (c.id == choice) {
           c.count = c.count + 1;
@@ -96,6 +94,45 @@ let recordPollVote = function(req, res, next) {
         console.log(c);
         return c;
       });
+
+      poll.save().then(poll => {
+        res.status(200).send(poll.toClient());
+      }).catch(err => {
+        errorJSON.status = 500;
+        errorJSON.error = 'Could not update poll.';
+        res.status(500).send(errorJSON);
+      });
+    } else {
+      res.status(403).send(errorJSON);
+    }
+  }).catch(err => {
+    res.status(403).send(err);
+  });
+};
+
+let addPollChoice = function(req, res, next) {
+  let errorJSON = {
+    status: 403,
+    error: 'Could not find a poll with that id.'
+  };
+
+  // grab the parameters sent in
+  let id = req.params.id;
+  let display = req.body.display;
+
+  Poll.findOne({_id: id}).then(poll => {
+    if (poll) {
+      // Find max choice id
+      let newId = poll.choices.reduce((acc, c) => {
+        if (c.id > acc) {
+          acc = c.id;
+        }
+        return acc;
+      }, -1) + 1;
+
+      // Make new choice object
+      // Push choice object onto choices array.
+      poll.choices.push({id: newId, display: display, count: 1});
 
       poll.save().then(poll => {
         res.status(200).send(poll.toClient());
@@ -144,7 +181,7 @@ router.post('/newpoll', authCheck, createPoll);
 
 router.get('/poll/:id', getPoll);
 router.post('/poll/:id', recordPollVote);
-router.put('/poll/:id', authCheck, debug.reqMirror);
+router.put('/poll/:id', authCheck, addPollChoice);
 router.delete('/poll/:id', authCheck, deletePoll);
 
 module.exports = router;
