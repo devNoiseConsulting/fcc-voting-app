@@ -6,8 +6,6 @@ const jwt = require('jwt-simple');
 
 const jwtSecret = Buffer.from(process.env.JWT_SECRET, 'hex');
 
-const debug = require('./debug');
-
 let errorJSON = {
   status: 403,
   success: false,
@@ -46,20 +44,36 @@ let createPoll = function(req, res, next) {
   Poll.create(data).then(poll => {
     res.status(200).send(poll.toClient());
   }).catch(err => {
-    res.status(500).send(err);
+    res.status(501).send(err);
+  });
+};
+
+let getPolls = function(req, res, next) {
+  errorJSON.error = 'Could not find any polls.';
+
+  // grab the parameters sent in
+  let offset = req.params.offset ? parseInt(req.params.offset) : 0;
+  offset = (offset < 0) ? 0 : offset;
+
+  let limit = req.params.limit ? parseInt(req.params.limit) : 20;
+  limit = (limit < 0) ? 20 : limit;
+  limit = (limit > 100) ? 100 : limit;
+
+  Poll.paginate({}, { offset: offset, limit: limit }).then(result => {
+    result.docs = result.docs.map(poll => poll.toClient());
+    res.status(200).send(result);
+  }).catch(err => {
+    res.status(501).send(err);
   });
 };
 
 let getPoll = function(req, res, next) {
-  let errorJSON = {
-    status: 403,
-    error: 'Could not find a poll with that id.'
-  };
+  errorJSON.error = 'Could not find a poll with that id.';
 
   // grab the parameters sent in
   let id = req.params.id;
 
-  // see if we can find the user in mongo.
+  // see if we can find the poll in mongo.
   Poll.findOne({_id: id}).then(poll => {
     if (poll) {
       res.status(200).send(poll.toClient());
@@ -67,7 +81,7 @@ let getPoll = function(req, res, next) {
       res.status(403).send(errorJSON);
     }
   }).catch(err => {
-    res.status(403).send(err);
+    res.status(501).send(err);
   });
 };
 
@@ -76,10 +90,7 @@ let recordPollVote = function(req, res, next) {
     return a.id - b.id;
   }
 
-  let errorJSON = {
-    status: 403,
-    error: 'Could not find a poll with that id.'
-  };
+  errorJSON.error = 'Could not find a poll with that id.';
 
   // grab the parameters sent in
   let id = req.params.id;
@@ -91,7 +102,6 @@ let recordPollVote = function(req, res, next) {
         if (c.id == choice) {
           c.count = c.count + 1;
         }
-        console.log(c);
         return c;
       });
 
@@ -106,15 +116,12 @@ let recordPollVote = function(req, res, next) {
       res.status(403).send(errorJSON);
     }
   }).catch(err => {
-    res.status(403).send(err);
+    res.status(501).send(err);
   });
 };
 
 let addPollChoice = function(req, res, next) {
-  let errorJSON = {
-    status: 403,
-    error: 'Could not find a poll with that id.'
-  };
+  errorJSON.error = 'Could not find a poll with that id.';
 
   // grab the parameters sent in
   let id = req.params.id;
@@ -145,15 +152,12 @@ let addPollChoice = function(req, res, next) {
       res.status(403).send(errorJSON);
     }
   }).catch(err => {
-    res.status(403).send(err);
+    res.status(501).send(err);
   });
 };
 
 let deletePoll = function(req, res, next) {
-  let errorJSON = {
-    status: 403,
-    error: 'Could not find a poll with that id or you are not allowed to remove that poll.'
-  };
+  errorJSON.error = 'Could not find a poll with that id or you are not allowed to remove that poll.';
 
   // grab the parameters sent in
   let id = req.params.id;
@@ -171,16 +175,15 @@ let deletePoll = function(req, res, next) {
       res.status(403).send(errorJSON);
     }
   }).catch(err => {
-    res.status(403).send(err);
+    res.status(501).send(err);
   });
 };
 
-router.get('/polls/:offset', debug.reqMirror);
-
-router.post('/newpoll', authCheck, createPoll);
-
+router.get('/poll/:offset/:limit', getPolls);
 router.get('/poll/:id', getPoll);
+router.get('/poll', getPolls);
 router.post('/poll/:id', recordPollVote);
+router.post('/poll', authCheck, createPoll);
 router.put('/poll/:id', authCheck, addPollChoice);
 router.delete('/poll/:id', authCheck, deletePoll);
 

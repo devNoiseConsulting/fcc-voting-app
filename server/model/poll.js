@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var mongoosePaginate = require('mongoose-paginate');
 
 var Schema = mongoose.Schema;
 
@@ -20,8 +21,8 @@ var PollSchema = new Schema({
     }
   ],
   voters: Array
-});
-
+}, {timestamps: true});
+PollSchema.plugin(mongoosePaginate);
 
 // https://stackoverflow.com/a/7038576
 PollSchema.methods.toClient = function() {
