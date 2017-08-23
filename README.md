@@ -16,7 +16,8 @@ An implamentation of freeCodeCamp's Build a Voting App.
 ## React App Routes:
 
 -   /login
-    -   Need to figure out authentication. [Passport?](http://passportjs.org/)
+    -   Need to figure out authentication.
+    -   [Passport?](http://passportjs.org/)
 -   /
     -   Display all the polls
     -   Let user authentication
@@ -36,10 +37,16 @@ An implamentation of freeCodeCamp's Build a Voting App.
 -   /api/signup
     -   POST request
     -   add new user to "database".
--   /api/newpoll
+-   /api/poll
+    -   GET request
+        -   return a list of polls.
+        -   Starting at 0 and return up to 20 results.
     -   POST request
-    -   add new poll to "database".
-    -   **Requirement:** user has to be authenticated.
+        -   add new poll to "database".
+        -   **Requirement:** user has to be authenticated.
+-   /api/poll/:offset/:limit
+    -   GET request
+        -   return a list of polls starting at offset
 -   /api/poll/:id
     -   GET request
         -   return the information for the poll with id.

@@ -179,11 +179,13 @@ let deletePoll = function(req, res, next) {
   });
 };
 
-router.get('/poll/:offset/:limit', getPolls);
-router.get('/poll/:id', getPoll);
 router.get('/poll', getPolls);
-router.post('/poll/:id', recordPollVote);
 router.post('/poll', authCheck, createPoll);
+
+router.get('/poll/:offset/:limit', getPolls);
+
+router.get('/poll/:id', getPoll);
+router.post('/poll/:id', recordPollVote);
 router.put('/poll/:id', authCheck, addPollChoice);
 router.delete('/poll/:id', authCheck, deletePoll);
 

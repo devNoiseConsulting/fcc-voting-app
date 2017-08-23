@@ -1,0 +1,225 @@
+{
+	"variables": [],
+	"info": {
+		"name": "fCC Voting App",
+		"_postman_id": "49e127f8-6a04-f22d-eb7d-7ae4fa12257a",
+		"description": "Calls to debug the fCC Voting App.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Sign Up",
+			"request": {
+				"url": "http://localhost:3001/api/signup",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \n\t\"email\": \"voter05@teamspam.net\",\n\t\"password\": \"BadPasword\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"url": "http://localhost:3001/api/login",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \n\t\"email\": \"voter05@teamspam.net\",\n\t\"password\": \"BadPasword\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get list of Polls",
+			"request": {
+				"url": "http://localhost:3001/api/poll",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Create Poll",
+			"request": {
+				"url": "http://localhost:3001/api/poll",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "title",
+							"value": "Test Poll 1",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "choices[0][id]",
+							"value": "0",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "choices[0][display]",
+							"value": "test 1",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "choices[0][count]",
+							"value": "0",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "choices[1][id]",
+							"value": "1",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "choices[1][display]",
+							"value": "test 2",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "choices[1][count]",
+							"value": "0",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "choices[2][id]",
+							"value": "2",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "choices[2][display]",
+							"value": "test 3",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "choices[2][count]",
+							"value": "0",
+							"description": "",
+							"type": "text"
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get Poll",
+			"request": {
+				"url": "http://localhost:3001/api/poll/59910fa21878ba6f962db773",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Add Vote to Poll",
+			"request": {
+				"url": "http://localhost:3001/api/poll/59910fa21878ba6f962db773",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "choice",
+							"value": "0",
+							"description": "",
+							"type": "text"
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Add Choice to Poll",
+			"request": {
+				"url": "http://localhost:3001/api/poll/59910fa21878ba6f962db773",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "choice",
+							"value": "0",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "display",
+							"value": "test 4",
+							"description": "",
+							"type": "text"
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Poll",
+			"request": {
+				"url": "http://localhost:3001/api/poll/59910fa21878ba6f962db773",
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
