@@ -89,3 +89,4 @@ An implamentation of freeCodeCamp's Build a Voting App.
 -   [Creating Role Based Authentication with Passport in Ionic 2 – Part 1](https://www.joshmorony.com/creating-role-based-authentication-with-passport-in-ionic-2-part-1/)
 -   [Mongoose CRUD (Create, Read, Update, Delete)](https://coursework.vschool.io/mongoose-crud/)
 -   [Create basic login forms using create react app module in reactjs](https://medium.com/technoetics/create-basic-login-forms-using-create-react-app-module-in-reactjs-511b9790dede)
+-   [How To Add React Router To Create React App2](http://www.penta-code.com/how-to-add-react-router-to-create-react-app/) Outdated, not using v4.

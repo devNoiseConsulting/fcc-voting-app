@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
-import Login from './Login';
+import React, { Component } from "react";
+import logo from "./logo.svg";
+import "./App.css";
+import { Link } from "react-router-dom";
 
 class App extends Component {
   render() {
@@ -11,7 +11,19 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h2>Welcome to React</h2>
         </div>
-        <Login />
+        <p className="App-intro">
+          To get started, edit <code>src/App.js</code> and save to reload.
+        </p>
+        <p>
+          <Link to="/home">Home</Link>
+        </p>
+        <p>
+          <Link to="/contact">Contact</Link>
+        </p>
+        <p>
+          <Link to="/notexist">Not Exist</Link>
+        </p>
+        <p>{this.props.children}</p>
       </div>
     );
   }
