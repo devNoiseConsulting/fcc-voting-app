@@ -34,7 +34,7 @@ let login = function(req, res, next) {
           httpOnly: true
         });
 
-        res.status(200).send(user);
+        res.status(200).send(user.toClient());
       } else {
         res.clearCookie('authToken');
         res.status(403).send(errorJSON);
@@ -47,18 +47,20 @@ let login = function(req, res, next) {
   let password = req.body.password;
 
   // see if we can find the user in mongo.
-  User.findOne({email: email}).then(user => {
-    if (user) {
-      // test to see if the password matches.
-      user.comparePassword(password, hanndlePasswordCheck);
-    } else {
+  User.findOne({ email: email })
+    .then(user => {
+      if (user) {
+        // test to see if the password matches.
+        user.comparePassword(password, hanndlePasswordCheck);
+      } else {
+        res.clearCookie('authToken');
+        res.status(403).send(errorJSON);
+      }
+    })
+    .catch(err => {
       res.clearCookie('authToken');
-      res.status(403).send(errorJSON);
-    }
-  }).catch(err => {
-    res.clearCookie('authToken');
-    res.status(403).send(err);
-  });
+      res.status(403).send(err);
+    });
 };
 
 let signup = function(req, res, next) {
@@ -66,21 +68,23 @@ let signup = function(req, res, next) {
     email: req.body.email,
     password: req.body.password
   };
-  
-  User.create(data).then(user => {
-    // Do some cookie stuff before we send the response.
-    let token = mkToken(user);
-    res.cookie('authToken', token, {
-      maxAge: 900000,
-      httpOnly: true
-    });
 
-    res.status(200).send(user)
-    next();
-  }).catch(err => {
-    res.clearCookie('authToken');
-    res.status(500).send(err);
-  });
+  User.create(data)
+    .then(user => {
+      // Do some cookie stuff before we send the response.
+      let token = mkToken(user);
+      res.cookie('authToken', token, {
+        maxAge: 900000,
+        httpOnly: true
+      });
+
+      res.status(200).send(user);
+      next();
+    })
+    .catch(err => {
+      res.clearCookie('authToken');
+      res.status(500).send(err);
+    });
 };
 
 let debugCookie = function(req, res, next) {
