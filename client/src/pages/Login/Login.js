@@ -15,6 +15,9 @@ class Login extends Component {
     let url = '/api/login';
     let myHeaders = new Headers();
 
+    myHeaders.append('Accept', 'application/json, text/plain, */*');
+    myHeaders.append('Content-Type', 'application/json');
+
     let data = {
       email: this.state.username,
       password: this.state.password
