@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 
 class App extends Component {
   render() {
+    console.log('App render()', this.state, this.props.location.state);
+
     return (
       <div className="App">
         <div className="App-header">
