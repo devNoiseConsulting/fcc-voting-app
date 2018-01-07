@@ -1,31 +1,32 @@
-import React, { Component } from "react";
-import logo from "./logo.svg";
-import "./App.css";
-import { Link } from "react-router-dom";
+import React, { Component } from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import logo from './logo.svg';
+import './App.css';
+
+import Home from './pages/Home/Home';
+import Login from './pages/Login/Login';
+import NotFound from './pages/NotFound/NotFound';
 
 class App extends Component {
-  render() {
-    console.log('App render()', this.state, this.props.location.state);
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
 
+  render() {
     return (
       <div className="App">
         <div className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <h2>Welcome to React</h2>
         </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-        <p>
-          <Link to="/home">Home</Link>
-        </p>
-        <p>
-          <Link to="/contact">Contact</Link>
-        </p>
-        <p>
-          <Link to="/notexist">Not Exist</Link>
-        </p>
-        <p>{this.props.children}</p>
+        <Router>
+          <Switch>
+            <Route exact path="/" component={Home} />
+            <Route path="/login" component={Login} />
+            <Route component={NotFound} />
+          </Switch>
+        </Router>
       </div>
     );
   }
